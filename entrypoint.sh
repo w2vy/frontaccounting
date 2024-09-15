@@ -1,10 +1,10 @@
 #!/bin/bash
 set -e
-echo "frontaccounting - FrontAccounting on Debian 8 Docker Container"
+echo "frontaccounting - FrontAccounting on Debian 10 Docker Container"
 
 # set constants
-FA_PROD_TAG="2.4.3"
-MYSQL_TAG="5.6"
+FA_PROD_TAG="master"
+MYSQL_TAG="8.0"
 WEBROOT="/var/www/html"
 OLDINDEX="/root/oldfiles/index.html"
 OLDKEY="/root/oldfiles/ssl-cert-snakeoil.key"
@@ -15,7 +15,7 @@ SSLCERT="/etc/ssl/certs/ssl-cert-snakeoil.pem"
 show_usage ()
 {
     echo
-    echo "usage: genebarker/frontaccounting [options]"
+    echo "usage: w2vy/frontaccounting [options]"
     echo
     echo "Options:"
     echo "  -p, --http         Run FA using plain HTTP (port 80)"
@@ -32,37 +32,37 @@ show_usage ()
     echo "To use FA webapp content on the host, mount it, i.e.:"
     echo "  $ docker run -d -p 80:80 \\"
     echo "      -v /home/me/frontacc:/var/www/html \\"
-    echo "      genebarker/frontaccounting --http"
+    echo "      w2vy/frontaccounting --http"
     echo
     echo "  (if host dir empty, the container will initialize it)"
     echo
     echo "To run FA with HTTPS creating new self-signed keys:"
     echo "  $ docker run -d -p 443:443 \\"
-    echo "      genebarker/frontaccounting --https mybox.example.com"
+    echo "      w2vy/frontaccounting --https mybox.example.com"
     echo
     echo "To run FA with HTTPS using your own keys, mount them, i.e.:"
     echo "  $ docker run -d -p 443:443 \\"
     echo "      -v /etc/ssl:/etc/ssl \\"
-    echo "      genebarker/frontaccounting --https mybox.example.com"
+    echo "      w2vy/frontaccounting --https mybox.example.com"
     echo
     echo "  (the cert's CN must match the FQDN)"
     echo
     echo "To run FA with HSTS, map both web ports, i.e.:"
     echo "  $ docker run -d -p 80:80 -p 443:443 \\"
-    echo "      genebarker/frontaccounting --hsts mybox.example.com"
+    echo "      w2vy/frontaccounting --hsts mybox.example.com"
     echo
     echo "To link FA with a MySQL container named 'fa_db', i.e.:"
     echo "  $ docker run -d -p 80:80 \\"
     echo "      --link fa_db:fa_db \\"
-    echo "      genebarker/frontaccounting --http"
+    echo "      w2vy/frontaccounting --http"
     echo
     echo "  (then use 'fa_db' for the MySQL hostname)"
     echo
     echo "To bypass script, just enter desired command, i.e.:"
-    echo "  $ docker run -it genebarker/frontaccounting bash"
+    echo "  $ docker run -it w2vy/frontaccounting bash"
     echo
     echo "FA webapp repository:"
-    echo "  https://github.com/genebarker/FA (see its Wiki)"
+    echo "  https://github.com/w2vy/FA (see its Wiki)"
     echo
     echo "Key paths in the container:"
     echo "  /var/www/html  - FA webapp content"

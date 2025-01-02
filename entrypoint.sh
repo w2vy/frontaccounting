@@ -105,6 +105,7 @@ init_content ()
         # use branch method
         if git checkout $branch ; then
             echo "info: FA branch '$branch' checked-out successfully"
+            git pull
         else
             echo "error: FA branch '$branch' does not exist or can't be checked out" >&2
             exit 1

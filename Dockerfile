@@ -14,12 +14,10 @@ RUN apt-get update && apt-get install -y \
     php7.3-mysql
 RUN DEBIAN_FRONTEND=noninteractive apt-get install nullmailer
 
-# get FrontAccounting from repository: genebarker/FA
+# get FrontAccounting from repository: w2vy/FA
 # fork of the official: FrontAccountingERP/FA
 RUN cd /root && \
-    git clone https://github.com/FrontAccountingERP/FA.git
-
-#    git clone https://github.com/genebarker/FA.git
+    git clone https://github.com/w2vy/FA.git
 
 # copy initial apache2 SSL key and cert
 # (to make sure they are not used by --https and --hsts options)

@@ -27,6 +27,11 @@ show_usage ()
     echo "                     FA webapp repository"
     echo "  -O, --overwrite    Overwrite existing FA webapp content with"
     echo "                     the repository's version (careful!)"
+    echo "  -M, --mailer       Configuration for nullmailer from Environment vars"
+    echo "                     MAILER_FROM sets adminaddr and allmailfrom"
+    echo "                     MAILER_DOMAIN sets defaultdomain"
+    echo "                     MAILER_PAUSE sets pausetime"
+    echo "                     MAILER_REMOTE sets remotes (only 1 line)"
     echo "  -h, --help         Display this message"
     echo
     echo "To use FA webapp content on the host, mount it, i.e.:"
@@ -149,6 +154,7 @@ fqdn=
 tag=$FA_PROD_TAG
 branch=
 overwrite=0
+mailer=0
 
 # if no arguments provided, just show usage
 if [ "$#" == "0" ]; then
@@ -210,6 +216,9 @@ while true; do
         -O|--overwrite)
             overwrite=1
             ;;
+        -M|--mailer)
+            mailer=1
+            ;;
         -h|-\?|--help)
             show_usage
             exit
@@ -228,6 +237,23 @@ while true; do
     # consume option
     shift
 done
+
+if [ $mailer == 1 ]; then
+    if [ -z "$MAILER_REMOTES" ] || [ -z "$MAILER_FROM" ] || [ -z "$MAILER_DOMAIN" ]; then
+        echo "error: -M or --mailer specificed but required Environment variable not set" >&2
+        echo "error: MAILER_FROM    = $MAILER_FROM" >&2
+        echo "error: MAILER_DOMAIN  = $MAILER_DOMAIN" >&2
+        echo "error: MAILER_REMOTES = $MAILER_REMOTES" >&2
+        exit 1
+    fi
+    echo "$MAILER_FROM" >/etc/nullmailer/adminaddr
+    echo "$MAILER_FROM" >/etc/nullmailer/allmailfrom
+    echo "$MAILER_DOMAIN" >/etc/nullmailer/defaultdomain
+    if [ -n "$MAILER_PAUSE" ]; then
+        echo "$MAILER_PAUSE" >/etc/nullmailer/pausetime
+    fi
+    echo "$MAILER_REMOTES" > /etc/nullmailer/remotes
+fi
 
 if [ -z "$protocol" ]; then
     echo "error: a '--http' , '--https', or '--hsts' protocol option must be selected" >&2
